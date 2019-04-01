@@ -27,7 +27,17 @@
 ::-webkit-scrollbar-thumb:window-inactive {
   background: #eee;
 }
-
----------------------
-
-本文来自 大黄老鼠 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/qq_32768743/article/details/82781921?utm_source=copy 
+.pr-container{
+    /*display: grid;*/
+    /*grid-template-columns: 800px 200px 200px;*/
+    /*grid-template-rows: 24px;*/
+    display: flex;
+    justify-content: space-between;
+}
+.pr-container-header {
+    font-size: 24px;
+}
+.pr-container .img-container {
+    width: 200px;
+    display: inline-block;
+}

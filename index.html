@@ -83,6 +83,46 @@
           </div>
      </div>
 </section>
+<!-- MY WORK SECTION -->
+<section id="work">
+     <div class="container">
+          <h2 style="text-align: center;">My Work</h2>
+          <div class="row">
+               <h3>Pull Request</h3>
+               <div class="col-md-12 col-sm-12">
+                    <div id="app">
+                         <div class="pr-container-header pr-container">
+                              <div>
+                                   Repo#No.
+                              </div>
+                              <div>
+                                   <div class="img-container">
+                                        Status
+                                   </div>
+                                   <div class="img-container">
+                                        Checks
+                                   </div>
+                              </div>
+                         </div>
+                         <div v-for="(item, index) in pr" class="pr-container">
+                              <div>
+                                   <span style="width: 50px">{{ index + 1 }}.</span>
+                                   <a :href="item.githubUrl" target="_blank">{{ item.prRepoAndNum }}</a>
+                              </div>
+                              <div>
+                                   <div class="img-container">
+                                        <img :src="item.prStatus" alt="GitHub PR Status">
+                                   </div>
+                                   <div class="img-container">
+                                        <img :src="item.prCheck" alt="GitHub PR Check">
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+</section>
 <!-- CONTACT SECTION -->
 <section id="contact">
      <div class="container">
@@ -128,5 +168,44 @@
 <script src="js/magnific-popup-options.js"></script>
 <script src="https://cdn.bootcss.com/wow/1.0.2/wow.min.js"></script>
 <script src="js/custom.js"></script>
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+     const app = new Vue({
+          el: '#app',
+          data: {
+               ownerBlacklist: [
+                    "onlyliuxin",
+                    "CoderXLoong",
+                    "csu-iteam",
+                    "sonichy",
+                    "ghtorrent",
+                    "intel",
+                    "gcmwhite",
+
+               ],
+               pr: []
+          }
+     });
+     fetch("https://api.github.com/search/issues?q=author:PikachuHy+type:pr")
+     .then(res => res.json())
+     .then(data => {
+          console.log(data)
+          data.items.forEach(it => {
+               const {url, title} = it
+               const arr = url.split("/");
+               const owner = arr[4]
+               const repo = arr[5]
+               const num = arr[7]
+               const prRepoAndNum = `${owner}/${repo}#${num}`
+               const prStatus = `https://img.shields.io/github/issues/detail/s/${owner}/${repo}/${num}.svg`
+               const prCheck = `https://img.shields.io/github/status/contexts/pulls/${owner}/${repo}/${num}.svg`
+               const githubUrl = `https://github.com/${owner}/${repo}/pull/${num}/`
+               if (!app.ownerBlacklist.includes(owner)) {
+                    app.pr.push({url, title, prStatus, prRepoAndNum, prCheck, githubUrl})
+               }
+          })
+     })
+</script>
 </body>
 </html>
